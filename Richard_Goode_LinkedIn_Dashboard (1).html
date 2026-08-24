@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Richard Goode — LinkedIn Post Analytics</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --navy: #333366;
+    --olive: #A0CE4E;
+    --grey-text: #646464;
+    --bg-page: #F5F5F3;
+    --card-bg: #FFFFFF;
+    --border: #E1E0D9;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Poppins', Helvetica, Arial, sans-serif; background: var(--bg-page); color: var(--grey-text); }
+  header { background: var(--navy); color: #fff; padding: 28px 40px; }
+  header .eyebrow { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--olive); font-weight: 500; margin: 0 0 6px; }
+  header h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  header .sub { font-size: 13px; color: #C7C7DE; margin: 0; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .kpi { background: var(--card-bg); border-radius: 10px; padding: 18px 20px; border: 1px solid var(--border); }
+  .kpi .label { font-size: 12px; color: var(--grey-text); margin-bottom: 6px; }
+  .kpi .value { font-size: 26px; font-weight: 600; color: var(--navy); }
+  .kpi .value.warn { color: #C0472B; }
+  .callout { background: #FFF6E8; border: 1px solid #F0DDB0; border-radius: 10px; padding: 12px 18px; font-size: 13px; color: #7A5A0A; margin-bottom: 20px; }
+  section.panel-group { margin-bottom: 20px; }
+  .panel-title { font-size: 14px; font-weight: 600; color: var(--navy); margin: 0 0 4px; }
+  .panel-note { font-size: 11.5px; color: #999; margin: 0 0 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); padding: 18px 20px; }
+  .chart-wrap { position: relative; height: 240px; }
+  .chart-wrap.tall { height: 300px; }
+  .legend { display: flex; gap: 16px; font-size: 12px; color: var(--grey-text); margin-bottom: 10px; }
+  .legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .card-with-stats { display: grid; grid-template-columns: 1fr 120px; gap: 12px; }
+  .stat-block { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 4px; }
+  .stat-block .big { font-size: 30px; font-weight: 600; color: var(--navy); line-height: 1; }
+  .stat-block .cap { font-size: 11px; color: var(--grey-text); }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.data-table th { text-align: left; color: var(--grey-text); font-weight: 500; padding: 6px 8px 8px; border-bottom: 1px solid var(--border); }
+  table.data-table th.num { text-align: right; }
+  table.data-table td { padding: 7px 8px; border-bottom: 1px solid #F0F0EC; color: #333; }
+  table.data-table td.num { text-align: right; font-weight: 600; color: var(--navy); }
+  table.data-table td.num.low { color: #C0472B; }
+  table.data-table tr:last-child td { border-bottom: none; }
+  .footnote { font-size: 11.5px; color: #999; text-align: center; margin-top: 24px; }
+  @media (max-width: 760px) { .kpi-row, .grid-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Garrington Private Credit</p>
+  <h1>Richard Goode — LinkedIn post performance</h1>
+  <p class="sub">May 4 – Aug 20, 2026 · 39 posts (5 pure reposts with no analytics excluded)</p>
+</header>
+
+<main>
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <h2 style="font-size: 18px; font-weight: 600; color: var(--navy); margin: 0;">Richard Goode — Post Analytics</h2>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="label">Total posts (excl. pure reposts)</div><div class="value">39</div></div>
+    <div class="kpi"><div class="label">Avg members reached (excl. outlier)</div><div class="value">97</div></div>
+    <div class="kpi">
+      <div class="label">Avg engagement rate</div>
+      <div class="value">5.1%</div>
+      <div style="font-size: 11px; color: var(--grey-text); margin-top: 2px;">(Reactions+Comments+Reposts) ÷ Members Reached · excl. outlier</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Avg reach, past month</div>
+      <div class="value">74</div>
+      <div style="font-size: 12px; color: #C0472B; font-weight: 500; margin-top: 2px;">↓ 21% vs prior month</div>
+    </div>
+  </div>
+
+  <section class="panel-group">
+    <div class="grid-2">
+      <div class="card">
+        <p class="panel-title">Members reached by day of week</p>
+        <p class="panel-note">Excludes 6/15 outlier</p>
+        <div class="chart-wrap"><canvas id="dayChart" role="img" aria-label="Bar chart of average members reached by day of week excluding the outlier post">Monday 153, Friday 106, Thursday 87, Wednesday 79, Tuesday 71 average members reached.</canvas></div>
+      </div>
+      <div class="card">
+        <p class="panel-title">Members reached by time of day</p>
+        <p class="panel-note">Excludes 6/15 outlier</p>
+        <div class="chart-wrap"><canvas id="timeChart" role="img" aria-label="Bar chart showing average members reached: morning before noon Eastern time 90, afternoon noon or later Eastern time 101">Morning before 12pm Eastern 90, Afternoon 12pm+ Eastern 101 average members reached.</canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-group">
+    <div class="card">
+      <p class="panel-title">Members reached by hour of day (ET)</p>
+      <p class="panel-note">Excludes 6/15 outlier · several hours are just 1–2 posts, treat spikes cautiously</p>
+      <div class="chart-wrap"><canvas id="hourChart" role="img" aria-label="Bar chart of average members reached by posting hour, Eastern time">8am 73 (n2), 9am 82 (n4), 10am 107 (n7), 11am 62 (n2), 12pm 118 (n2), 1pm 87 (n8), 2pm 119 (n1), 3pm 139 (n5), 4pm 101 (n5), 5pm 9 (n1), 8pm 59 (n1) average members reached.</canvas></div>
+    </div>
+  </section>
+
+  <section class="panel-group">
+    <div class="card">
+      <p class="panel-title">Reach by content type</p>
+      <p class="panel-note">Excludes 6/15 outlier from Newsletter Article average</p>
+      <div class="chart-wrap"><canvas id="catChart" role="img" aria-label="Bar chart of average members reached by content category">Newsletter Article 121, Risk and Collateral Discipline 104, Investment Philosophy 102, Event Partnership 84, Boutique Advantage 74, Deal Case Study 71 average members reached.</canvas></div>
+      <div style="margin-top: 12px; font-size: 11px; color: var(--grey-text); line-height: 1.6;">
+        <div><strong style="color: var(--navy);">Risk & Collateral</strong> — why the structure protects capital</div>
+        <div><strong style="color: var(--navy);">Newsletter Article</strong> — link-outs to full Garrington Edge pieces</div>
+        <div><strong style="color: var(--navy);">Investment Phil.</strong> — how decisions get made, not what's decided</div>
+        <div><strong style="color: var(--navy);">Event/Partnership</strong> — conference, webinar, partnership news</div>
+        <div><strong style="color: var(--navy);">Boutique Advantage</strong> — why staying small is a strength</div>
+        <div><strong style="color: var(--navy);">Deal Case Study</strong> — concrete examples proving the thesis</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-group">
+    <div class="card">
+      <p class="panel-title">Impressions and members reached over time</p>
+      <p class="panel-note">6/15 outlier point shown for context, capped visually so the rest of the trend stays readable</p>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--navy)"></span>Impressions</span>
+        <span><span class="dot" style="background:var(--olive)"></span>Members reached</span>
+      </div>
+      <div class="chart-wrap tall"><canvas id="trendChart" role="img" aria-label="Line chart of impressions and members reached per post from May to August 2026">Impressions and members reached per post across the campaign, generally trending downward after an early peak.</canvas></div>
+    </div>
+  </section>
+
+  <section class="panel-group">
+    <div class="grid-2">
+      <div class="card">
+        <p class="panel-title">Reach: posts with vs without a link</p>
+        <p class="panel-note">Excludes 6/15 outlier</p>
+        <div class="card-with-stats">
+          <div class="chart-wrap"><canvas id="linkChart" role="img" aria-label="Bar chart comparing average members reached for posts with and without a link, excluding one outlier post">No link 90, contains link 134 average members reached.</canvas></div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div class="stat-block" style="border-left:none;">
+              <div class="big">6</div>
+              <div class="cap">Posts with a link</div>
+            </div>
+            <div class="stat-block" style="border-left:none; border-top:1px solid var(--border); padding-top:10px;">
+              <div class="big">3</div>
+              <div class="cap">Total link clicks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <p class="panel-title">Reach: original posts vs reposts with thoughts</p>
+        <p class="panel-note">Excludes 6/15 outlier</p>
+        <div class="chart-wrap"><canvas id="formatChart" role="img" aria-label="Bar chart comparing average members reached for original posts and reposts with added commentary, excluding one outlier post">Original 100, Repost plus Thoughts 72 average members reached.</canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-group">
+    <div class="card">
+      <p class="panel-title">Link clicks by post (posts containing a link only)</p>
+      <table class="data-table">
+        <tr><th>Topic</th><th>Date</th><th class="num">Link clicks</th></tr>
+        <tr><td>Underwriting principles at Garrington</td><td>7/24</td><td class="num">2</td></tr>
+        <tr><td>The Garrington Edge: when a borrower can't pay</td><td>7/20</td><td class="num">1</td></tr>
+        <tr><td>The Garrington Edge: liquidity terms vs loan duration</td><td>5/13</td><td class="num low">0</td></tr>
+        <tr><td>Investors want two things: returns and capital protection</td><td>5/29</td><td class="num low">0</td></tr>
+        <tr><td>The Cost of Recovery — time lost in drawdowns</td><td>6/8</td><td class="num low">0</td></tr>
+        <tr><td>Not all collateral is created equal</td><td>6/30</td><td class="num low">0</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel-group">
+    <div class="grid-2">
+      <div class="card">
+        <p class="panel-title">Top 5 posts by reach</p>
+        <table class="data-table">
+          <tr><th>Topic</th><th>Date</th><th class="num">Reached</th></tr>
+          <tr><td>The Garrington Edge: differentiated approach and consistency</td><td>6/15</td><td class="num">1,893</td></tr>
+          <tr><td>We win by not losing</td><td>5/4</td><td class="num">212</td></tr>
+          <tr><td>Underwriting principles at Garrington</td><td>7/24</td><td class="num">206</td></tr>
+          <tr><td>What actually drives returns</td><td>6/26</td><td class="num">192</td></tr>
+          <tr><td>Our approach to lending: tangible assets</td><td>5/15</td><td class="num">176</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <p class="panel-title">Lowest 5 posts by reach</p>
+        <table class="data-table">
+          <tr><th>Topic</th><th>Date</th><th class="num">Reached</th></tr>
+          <tr><td>Toreigh Stuart on managing volatility</td><td>8/19</td><td class="num low">9</td></tr>
+          <tr><td>Reach out to Garrington (repost)</td><td>7/16</td><td class="num low">13</td></tr>
+          <tr><td>Everything our firm has built (repeat theme)</td><td>8/4</td><td class="num low">39</td></tr>
+          <tr><td>The families behind the facilities</td><td>7/31</td><td class="num low">45</td></tr>
+          <tr><td>Learn more about Garrington (repost)</td><td>6/9</td><td class="num low">54</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <p class="footnote">Some categories reflect as few as 2–6 posts — treat as early signals, not confirmed patterns. Two pure reposts with no added commentary (Toreigh's webinar promo, Garrington Private Credit's "families" edition) carry no independent analytics and were excluded entirely. Engagement rate reflects who reacted out of everyone who saw the post — it doesn't distinguish colleagues from external prospects, so treat it as directional, not a clean read on outside interest.</p>
+
+</main>
+
+<script>
+Chart.defaults.font.family = "'Poppins', Helvetica, Arial, sans-serif";
+
+function barChart(id, labels, data, colors) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderRadius: 4, barThickness: 30 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#333366', titleFont: { size: 12 }, bodyFont: { size: 12 } } },
+      scales: {
+        x: { ticks: { color: '#898781', font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: '#898781', font: { size: 11 } }, grid: { color: '#E1E0D9' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+barChart('dayChart', ['Monday (n=5)', 'Friday (n=11)', 'Thursday (n=7)', 'Wednesday (n=9)', 'Tuesday (n=6)'], [153, 106, 87, 79, 71], '#333366');
+barChart('timeChart', ['Morning before 12pm ET (n=15)', 'Afternoon 12pm+ ET (n=23)'], [90, 101], '#333366');
+barChart('hourChart',
+  ['8am (n=2)','9am (n=4)','10am (n=7)','11am (n=2)','12pm (n=2)','1pm (n=8)','2pm (n=1)','3pm (n=5)','4pm (n=5)','5pm (n=1)','8pm (n=1)'],
+  [73,82,107,62,118,87,119,139,101,9,59],
+  '#333366');
+barChart('catChart', ['Newsletter (n=4)', 'Risk/Collateral (n=14)', 'Investment Phil. (n=7)', 'Event/Partner. (n=6)', 'Boutique Adv. (n=5)', 'Deal Case Study (n=2)'], [121, 104, 102, 84, 74, 71], '#333366');
+barChart('linkChart', ['No link (n=32)', 'Contains link (n=6)'], [90, 134], ['#333366', '#A0CE4E']);
+barChart('formatChart', ['Original (n=33)', 'Repost + Thoughts (n=5)'], [100, 72], '#333366');
+
+const dates = ["5/4","5/7","5/13","5/15","5/21","5/25","5/29","6/5","6/8","6/9","6/10","6/12","6/15","6/17","6/19","6/22","6/25","6/26","6/30","7/1","7/3","7/8","7/9","7/10","7/14","7/15","7/16","7/20","7/22","7/24","7/28","7/30","7/31","8/4","8/5","8/11","8/14","8/19","8/20"];
+const impressions = [409,249,209,294,376,269,244,139,210,94,224,167,2422,181,227,277,156,330,202,133,113,126,111,154,161,170,46,267,203,314,151,108,88,61,176,108,112,67,152];
+const members = [212,156,101,176,147,123,116,65,116,54,119,63,1893,68,110,156,75,192,112,54,56,68,73,83,100,92,13,156,125,206,81,59,45,39,77,42,50,9,86];
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: dates,
+    datasets: [
+      { data: impressions, borderColor: '#333366', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 2, pointHoverRadius: 5, tension: 0.2 },
+      { data: members, borderColor: '#A0CE4E', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 2, pointHoverRadius: 5, tension: 0.2 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#333366', titleFont: { size: 12 }, bodyFont: { size: 12 } } },
+    scales: {
+      x: { ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12, color: '#898781', font: { size: 10 } }, grid: { display: false } },
+      y: { ticks: { color: '#898781', font: { size: 10 } }, grid: { color: '#E1E0D9' }, beginAtZero: true }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
